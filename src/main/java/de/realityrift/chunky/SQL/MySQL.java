@@ -14,7 +14,7 @@ public class MySQL
 {
 
 
-    static Language language = new Language(new File(Bukkit.getPluginManager() + "/lang.ini"));
+    static Language language = new Language(new File(Main.getInstance().getDataFolder(), "lang.ini"));
 
     public static String host = Main.config.getString("host");
     public static String port = Main.config.getString("port");

@@ -10,6 +10,7 @@ opbypass: true
 #IMPORTANT: this feature REQUIRES the plugin 'ecofy' from sirswiperlpp
 chunkrent:
   paychunks: true
-  #this option defines how often a player needs to pay example: 1 = every minecraft day. 2 = every second minecraft day and so on..
-  paypercycle: "1"
+  #this option defines how often a player needs to pay
+  #example: 1 = every minecraft day. 2 = every second minecraft day and so on
+  paypercycle: 1
   moneyperchunk: 100

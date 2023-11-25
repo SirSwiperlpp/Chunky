@@ -18,7 +18,7 @@ public class ChunkProvider
 
     public static boolean getChunkFromdb(Chunk chunk) {
         try {
-            String query = "SELECT * FROM claimed_chunks WHERE x = ? AND z = ?";
+            String query = "SELECT ChunkX, ChunkZ FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setInt(1, chunk.getX());
                 statement.setInt(2, chunk.getZ());
@@ -33,14 +33,38 @@ public class ChunkProvider
         return false;
     }
 
+    public static String getPlayerNameForChunk(Chunk chunk) {
+        try {
+            String query = "SELECT player_name FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+                statement.setInt(1, chunk.getX());
+                statement.setInt(2, chunk.getZ());
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("player_name");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        return "";
+    }
+
+
     public static void insertChunk(Player player, Chunk chunk) {
         try {
-            String query = "INSERT INTO claimed_chunks(player_name,UUID,ChunkX,ChunkZ) values (?,?,?,?)";
+            String query = "INSERT IGNORE INTO claimed_chunks (player_name, UUID, ChunkX, ChunkZ) values (?,?,?,?)";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setString(1, player.getName());
                 statement.setString(2, String.valueOf(player.getUniqueId()));
                 statement.setInt(3, chunk.getX());
                 statement.setInt(4, chunk.getZ());
+
+                statement.executeUpdate();
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,7 +74,7 @@ public class ChunkProvider
     public static void removeChunk(Chunk chunk)
     {
         try {
-            String query = "DELETE FROM claimed_chunks WHERE x = ? AND z = ?";
+            String query = "DELETE FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setInt(1, chunk.getX());
                 statement.setInt(2, chunk.getZ());

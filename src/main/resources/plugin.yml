@@ -2,3 +2,7 @@ name: Chunky
 version: '${project.version}'
 main: de.realityrift.chunky.Main.Main
 api-version: '1.20'
+
+commands:
+  chunk:
+    permission: chunk.command
