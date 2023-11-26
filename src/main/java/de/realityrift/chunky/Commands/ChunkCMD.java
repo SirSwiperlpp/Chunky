@@ -32,13 +32,12 @@ public class ChunkCMD implements CommandExecutor {
             sender.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
             return true;
         }
+        Player player = (Player) sender;
+        Chunk chunk = player.getLocation().getChunk();
 
         switch (strings[0].toLowerCase())
         {
             case "claim":
-                Player player = (Player) sender;
-                Chunk chunk = player.getLocation().getChunk();
-
                 System.out.println("Checking chunk claim status...");
 
                 if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), "")) {
@@ -48,19 +47,53 @@ public class ChunkCMD implements CommandExecutor {
                 } else {
                     String alrdyclaimed = ChunkProvider.getPlayerNameForChunk(chunk);
                     System.out.println("Chunk is already claimed by: " + alrdyclaimed);
-                    player.sendMessage(language.get("prefix") + language.get("claim.failed.claimed"));
+                    player.sendMessage(language.get("prefix") + language.translateString("claim.failed.claimed", alrdyclaimed));
                 }
 
                 break;
 
             case "unclaim":
-                Player player2 = (Player) sender;
-                Chunk chunk2 = player2.getLocation().getChunk();
+                if (!ChunkProvider.getChunkFromdb(chunk))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("chunk.not.claimed"));
+                    return true;
+                }
 
+                if (player.isOp())
+                {
+                    String target = ChunkProvider.getPlayerNameForChunk(chunk);
+                    ChunkProvider.removeChunk(chunk);
+                    player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
+
+                    if (Objects.equals(target, player.getName())) return true;
+
+                    if (Main.config.getBoolean("notifyunclaim"))
+                    {
+                        String chunkX = String.valueOf(chunk.getX());
+                        String chunkZ = String.valueOf(chunk.getZ());
+                        Bukkit.getPlayer(target).sendMessage(language.get("prefix") + language.translateString("unclaim.notify", chunkX, chunkZ));
+                        return true;
+                    }
+                    return true;
+                }
+
+                if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), player.getName()))
+                {
+                    ChunkProvider.removeChunk(chunk);
+                    player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
+                    return true;
+                } else {
+                    player.sendMessage(language.get("prefix") + language.get("unclaim.failed.not.owned"));
+                }
                 break;
 
             case "trust":
                 sender.sendMessage("wip");
+                break;
+
+            default:
+                String usage = "/chunk [claim | unclaim | trust]";
+                player.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
                 break;
         }
 

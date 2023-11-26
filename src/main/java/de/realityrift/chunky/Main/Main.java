@@ -9,6 +9,8 @@ import de.realityrift.chunky.TabCompletter.ChunkTab;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,8 +55,9 @@ public final class Main extends JavaPlugin {
         }
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerListener(), this);
-        getCommand("chunk").setExecutor(new ChunkCMD());
-        getCommand("chunk").setTabCompleter(new ChunkTab());
+        ChunkCMD chunkCMD = new ChunkCMD();
+        getCommand("chunk").setExecutor(chunkCMD);
+        getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));
 
     }
 

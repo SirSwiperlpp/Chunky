@@ -7,6 +7,9 @@ pwd: ""
 #if set to 'false' all Operators lose access to building on other chunks and they cant unclaim them as well
 opbypass: true
 
+#if set to 'false' the owner of the chunk will not get notified if his chunk get unclaimed by an Administrator.
+notifyunclaim: true
+
 #IMPORTANT: this feature REQUIRES the plugin 'ecofy' from sirswiperlpp
 chunkrent:
   paychunks: true

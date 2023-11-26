@@ -6,3 +6,8 @@ api-version: '1.20'
 commands:
   chunk:
     permission: chunk.command
+    tab-completer: de.realityrift.chunky.TabCompletter.ChunkTab
+
+permissions:
+  chunk.command:
+    default: true

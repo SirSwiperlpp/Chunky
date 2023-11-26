@@ -78,6 +78,8 @@ public class ChunkProvider
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setInt(1, chunk.getX());
                 statement.setInt(2, chunk.getZ());
+
+                statement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
