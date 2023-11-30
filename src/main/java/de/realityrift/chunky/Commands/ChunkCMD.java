@@ -91,8 +91,12 @@ public class ChunkCMD implements CommandExecutor {
                 sender.sendMessage("wip");
                 break;
 
+            case "info":
+                sender.sendMessage("wip");
+                break;
+
             default:
-                String usage = "/chunk [claim | unclaim | trust]";
+                String usage = "/chunk [claim | unclaim | trust | info]";
                 player.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
                 break;
         }

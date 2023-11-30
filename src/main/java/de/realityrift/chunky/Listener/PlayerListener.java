@@ -6,6 +6,7 @@ import de.realityrift.chunky.Provider.ChunkProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.File;
@@ -24,7 +26,11 @@ public class PlayerListener implements Listener
     static Language language = new Language(new File(Main.getInstance().getDataFolder(), "lang.ini"));
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getPlayer().isOp()) event.setCancelled(false);
+        if (event.getPlayer().isOp())
+        {
+            event.setCancelled(false);
+            return;
+        }
 
         if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk())) {
             String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk());
@@ -45,7 +51,11 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (event.getPlayer().isOp()) event.setCancelled(false);
+        if (event.getPlayer().isOp())
+        {
+            event.setCancelled(false);
+            return;
+        }
 
         if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk())) {
             String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk());
@@ -66,7 +76,11 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getPlayer().isOp()) event.setCancelled(false);
+        if (event.getPlayer().isOp())
+        {
+            event.setCancelled(false);
+            return;
+        }
 
         if (event.getClickedBlock() != null && !canPlayerInteract(event.getClickedBlock(), event.getPlayer())) {
             event.getPlayer().sendMessage(language.get("prefix") + language.get("not.trusted"));
@@ -86,8 +100,5 @@ public class PlayerListener implements Listener
 
         return true;
     }
-
-
-
 
 }

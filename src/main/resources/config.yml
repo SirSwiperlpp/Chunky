@@ -7,6 +7,13 @@ pwd: ""
 #if set to 'false' all Operators lose access to building on other chunks and they cant unclaim them as well
 opbypass: true
 
+#IMPORTANT: u should set it to 'true' if pistons are activ they can push block into untrusted Chunks.
+disable-pistons: true
+
+#IMPORTANT: u should leave it to 'true' end_crystals can explode through chunks and i cant find a fix for it
+#They are only disabled in the Nether and Overworld.
+disable-crystal: true
+
 #if set to 'false' the owner of the chunk will not get notified if his chunk get unclaimed by an Administrator.
 notifyunclaim: true
 

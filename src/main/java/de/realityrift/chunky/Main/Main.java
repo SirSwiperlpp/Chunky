@@ -2,15 +2,15 @@ package de.realityrift.chunky.Main;
 
 import de.realityrift.chunky.Commands.ChunkCMD;
 import de.realityrift.chunky.Lang.Language;
+import de.realityrift.chunky.Listener.BlockListener;
 import de.realityrift.chunky.Listener.PlayerListener;
+import de.realityrift.chunky.Listener.TNTListener;
 import de.realityrift.chunky.Provider.ChunkProvider;
 import de.realityrift.chunky.SQL.MySQL;
 import de.realityrift.chunky.TabCompletter.ChunkTab;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,6 +55,8 @@ public final class Main extends JavaPlugin {
         }
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerListener(), this);
+        pm.registerEvents(new BlockListener(), this);
+        pm.registerEvents(new TNTListener(), this);
         ChunkCMD chunkCMD = new ChunkCMD();
         getCommand("chunk").setExecutor(chunkCMD);
         getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));
