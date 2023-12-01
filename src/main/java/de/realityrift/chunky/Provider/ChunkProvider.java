@@ -7,12 +7,14 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChunkProvider
 {
     public static void createChunkdb() throws SQLException
     {
-        PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS claimed_chunks (player_name VARCHAR(100), UUID VARCHAR(100), ChunkX INT, ChunkZ INT)");
+        PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS claimed_chunks (player_name VARCHAR(100), UUID VARCHAR(100), trusted VARCHAR(100), flags VARCHAR(100), ChunkX INT, ChunkZ INT)");
         ps.executeUpdate();
     }
 
@@ -31,6 +33,34 @@ public class ChunkProvider
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static Map<String, Object> getAllInfosAboutChunk(Chunk chunk) {
+        Map<String, Object> resultData = new HashMap<>();
+
+        try {
+            String query = "SELECT * FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+                statement.setInt(1, chunk.getX());
+                statement.setInt(2, chunk.getZ());
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String[] columns = {"player_name", "UUID", "trusted", "flags", "ChunkX", "ChunkZ"};
+
+                        for (String columnName : columns) {
+                            resultData.put(columnName, resultSet.getObject(columnName));
+                        }
+
+                        return resultData;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        return resultData;
     }
 
     public static String getPlayerNameForChunk(Chunk chunk) {
@@ -54,14 +84,16 @@ public class ChunkProvider
     }
 
 
-    public static void insertChunk(Player player, Chunk chunk) {
+    public static void insertChunk(Player player, Chunk chunk, String trusted, String flags) {
         try {
-            String query = "INSERT IGNORE INTO claimed_chunks (player_name, UUID, ChunkX, ChunkZ) values (?,?,?,?)";
+            String query = "INSERT IGNORE INTO claimed_chunks (player_name, UUID, trusted, flags, ChunkX, ChunkZ) values (?,?,?,?,?,?)";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setString(1, player.getName());
                 statement.setString(2, String.valueOf(player.getUniqueId()));
-                statement.setInt(3, chunk.getX());
-                statement.setInt(4, chunk.getZ());
+                statement.setString(3, trusted);
+                statement.setString(4, flags);
+                statement.setInt(5, chunk.getX());
+                statement.setInt(6, chunk.getZ());
 
                 statement.executeUpdate();
 

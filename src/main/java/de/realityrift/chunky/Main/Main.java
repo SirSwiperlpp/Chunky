@@ -3,7 +3,7 @@ package de.realityrift.chunky.Main;
 import de.realityrift.chunky.Commands.ChunkCMD;
 import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Listener.BlockListener;
-import de.realityrift.chunky.Listener.PlayerListener;
+import de.realityrift.chunky.Listener.ProtectionListener;
 import de.realityrift.chunky.Listener.TNTListener;
 import de.realityrift.chunky.Provider.ChunkProvider;
 import de.realityrift.chunky.SQL.MySQL;
@@ -54,7 +54,7 @@ public final class Main extends JavaPlugin {
             throw new RuntimeException(e);
         }
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new PlayerListener(), this);
+        pm.registerEvents(new ProtectionListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new TNTListener(), this);
         ChunkCMD chunkCMD = new ChunkCMD();

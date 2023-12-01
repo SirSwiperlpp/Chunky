@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Objects;
 
 public class ChunkCMD implements CommandExecutor {
@@ -28,7 +29,7 @@ public class ChunkCMD implements CommandExecutor {
 
         if (strings.length < 1)
         {
-            String usage = "/chunk [claim | unclaim | trust]";
+            String usage = "/chunk [claim | unclaim | trust | info]";
             sender.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
             return true;
         }
@@ -38,21 +39,31 @@ public class ChunkCMD implements CommandExecutor {
         switch (strings[0].toLowerCase())
         {
             case "claim":
-                System.out.println("Checking chunk claim status...");
+                if (!Main.config.getBoolean("enabledCommands.claim"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
 
                 if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), "")) {
-                    System.out.println("Chunk is not claimed. Claiming now...");
-                    ChunkProvider.insertChunk(player, chunk);
+                    String trusted = "None";
+                    String flags = "None";
+                    ChunkProvider.insertChunk(player, chunk, trusted, flags);
                     player.sendMessage(language.get("prefix") + language.get("claim.success"));
                 } else {
                     String alrdyclaimed = ChunkProvider.getPlayerNameForChunk(chunk);
-                    System.out.println("Chunk is already claimed by: " + alrdyclaimed);
                     player.sendMessage(language.get("prefix") + language.translateString("claim.failed.claimed", alrdyclaimed));
                 }
 
                 break;
 
             case "unclaim":
+                if (!Main.config.getBoolean("enabledCommands.unclaim"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+
                 if (!ChunkProvider.getChunkFromdb(chunk))
                 {
                     player.sendMessage(language.get("prefix") + language.get("chunk.not.claimed"));
@@ -88,15 +99,46 @@ public class ChunkCMD implements CommandExecutor {
                 break;
 
             case "trust":
-                sender.sendMessage("wip");
+                if (!Main.config.getBoolean("enabledCommands.trust"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+
+                sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
                 break;
 
             case "info":
-                sender.sendMessage("wip");
+                if (!Main.config.getBoolean("enabledCommands.info"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+                Map<String, Object> ChunkData = ChunkProvider.getAllInfosAboutChunk(chunk);
+
+                if (ChunkData.isEmpty())
+                {
+                    player.sendMessage(language.get("prefix") + language.get("chunk.not.claimed"));
+                    return true;
+                }
+                String pname = String.valueOf(ChunkData.get("player_name"));
+                String ctrusted = String.valueOf(ChunkData.get("trusted"));
+                String cflags = String.valueOf(ChunkData.get("flags"));
+                player.sendMessage("§7------------\n§6Chunk Owner §8> §c" + pname + "\n§6Trusted §8> §c" + ctrusted + "\n§6Flags: §8> §c" + cflags + "\n§7------------");
+                break;
+
+            case "flag":
+                if (!Main.config.getBoolean("enabledCommands.flag"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+
+                sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
                 break;
 
             default:
-                String usage = "/chunk [claim | unclaim | trust | info]";
+                String usage = "§c/chunk [claim | unclaim | trust | info]";
                 player.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
                 break;
         }

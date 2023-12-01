@@ -3,6 +3,22 @@ port: "3306"
 user: "root"
 pwd: ""
 
+#if set to 'true' the plugin will request the 'SirAPI' server with your key. just so I can register UUIDs, names and bans
+#u can set it to 'false' any time, and it will not change how the plugin works.
+#
+#In case ur asking your self 'but why the key' it is so no one else can request the server with just for fun the key is generated one-time
+#for more questions visit the Community discord 'http://discord.realityrift.de'
+#
+#This feature will be developed soon.
+requestDeveloperServer: false
+apikey: ""
+
+#if set to 'true' the plugin will request the PluginUpdate Server and if anything changed it will notify u about an update.
+#u can set this feature to 'false' and it will not change how the plugin works.
+#
+#This feature will be developed soon.
+requestUpdateServer: false
+
 #if set to 'true' all Operators can bypass the build restriction on claimed chunks
 #if set to 'false' all Operators lose access to building on other chunks and they cant unclaim them as well
 opbypass: true
@@ -10,8 +26,7 @@ opbypass: true
 #IMPORTANT: u should set it to 'true' if pistons are activ they can push block into untrusted Chunks.
 disable-pistons: true
 
-#IMPORTANT: u should leave it to 'true' end_crystals can explode through chunks and i cant find a fix for it
-#They are only disabled in the Nether and Overworld.
+#IMPORTANT: u should leave it to 'true' end_crystals can explode through chunks and I cant find a fix for it,
 disable-crystal: true
 
 #if set to 'false' the owner of the chunk will not get notified if his chunk get unclaimed by an Administrator.
@@ -24,3 +39,12 @@ chunkrent:
   #example: 1 = every minecraft day. 2 = every second minecraft day and so on
   paypercycle: 1
   moneyperchunk: 100
+
+  #enable or disable commands.
+  #EXAMPLE: claim: true = '/chunk claim' is activated
+enabledCommands:
+  claim: true
+  trust: true
+  info: true
+  unclaim: true
+  flag: true

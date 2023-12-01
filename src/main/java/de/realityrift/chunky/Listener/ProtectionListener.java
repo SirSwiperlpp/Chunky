@@ -3,25 +3,19 @@ package de.realityrift.chunky.Listener;
 import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Main.Main;
 import de.realityrift.chunky.Provider.ChunkProvider;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
-public class PlayerListener implements Listener
+public class ProtectionListener implements Listener
 {
     static Language language = new Language(new File(Main.getInstance().getDataFolder(), "lang.ini"));
     @EventHandler
@@ -42,10 +36,6 @@ public class PlayerListener implements Listener
                 event.setCancelled(true);
             }
 
-            System.out.println("Chunk is in the database.");
-            System.out.println("PlayerNameForChunk: " + playerNameForChunk);
-        } else {
-            System.out.println("Chunk is not in the database.");
         }
     }
 
@@ -66,11 +56,6 @@ public class PlayerListener implements Listener
                 event.getPlayer().sendMessage(language.get("prefix") + language.get("not.trusted"));
                 event.setCancelled(true);
             }
-
-            System.out.println("Chunk is in the database.");
-            System.out.println("PlayerNameForChunk: " + playerNameForChunk);
-        } else {
-            System.out.println("Chunk is not in the database.");
         }
     }
 
