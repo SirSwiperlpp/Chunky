@@ -5,6 +5,7 @@ import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Listener.BlockListener;
 import de.realityrift.chunky.Listener.ProtectionListener;
 import de.realityrift.chunky.Listener.TNTListener;
+import de.realityrift.chunky.Listener.WaterListener;
 import de.realityrift.chunky.Provider.ChunkProvider;
 import de.realityrift.chunky.SQL.MySQL;
 import de.realityrift.chunky.TabCompletter.ChunkTab;
@@ -57,6 +58,7 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new ProtectionListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new TNTListener(), this);
+        pm.registerEvents(new WaterListener(), this);
         ChunkCMD chunkCMD = new ChunkCMD();
         getCommand("chunk").setExecutor(chunkCMD);
         getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));

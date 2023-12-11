@@ -58,4 +58,16 @@ public class BlockListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onAnchorPlace(BlockPlaceEvent event)
+    {
+        if (!Main.config.getBoolean("disable-anchor")) return;
+
+        if (event.getBlockPlaced().getType().equals(Material.RESPAWN_ANCHOR))
+        {
+            event.getPlayer().sendMessage(language.get("prefix") + language.translateString("block.disabled", String.valueOf(event.getBlockPlaced().getType())));
+            event.setCancelled(true);
+        }
+    }
+
 }

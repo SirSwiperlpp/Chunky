@@ -29,7 +29,7 @@ public class ChunkCMD implements CommandExecutor {
 
         if (strings.length < 1)
         {
-            String usage = "/chunk [claim | unclaim | trust | info]";
+            String usage = "/chunk [claim | unclaim | trust | flag | info]";
             sender.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
             return true;
         }
@@ -77,6 +77,8 @@ public class ChunkCMD implements CommandExecutor {
                     player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
 
                     if (Objects.equals(target, player.getName())) return true;
+
+                    if (Bukkit.getPlayer(target) == null) return true;
 
                     if (Main.config.getBoolean("notifyunclaim"))
                     {
@@ -138,7 +140,7 @@ public class ChunkCMD implements CommandExecutor {
                 break;
 
             default:
-                String usage = "§c/chunk [claim | unclaim | trust | info]";
+                String usage = "§c/chunk [claim | unclaim | trust | flag | info]";
                 player.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
                 break;
         }

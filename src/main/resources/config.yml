@@ -26,8 +26,14 @@ opbypass: true
 #IMPORTANT: u should set it to 'true' if pistons are activ they can push block into untrusted Chunks.
 disable-pistons: true
 
-#IMPORTANT: u should leave it to 'true' end_crystals can explode through chunks and I cant find a fix for it,
+#this option only disables the Damage on blocks in every chunks of every world. it stil makes damage to players.
 disable-crystal: true
+
+#This option disables Respawn Anchors.
+disable-anchor: true
+
+#IMPORTANT: u should leave it to 'false' waterflows trough chunks and i am to dump to fix it ;-;
+waterflows: false
 
 #if set to 'false' the owner of the chunk will not get notified if his chunk get unclaimed by an Administrator.
 notifyunclaim: true

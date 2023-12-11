@@ -23,7 +23,7 @@ public class ChunkTab implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            List<String> subCommands = Arrays.asList("claim", "unclaim", "trust", "info");
+            List<String> subCommands = Arrays.asList("claim", "unclaim", "trust", "info", "flag");
             StringUtil.copyPartialMatches(args[0], subCommands, completions);
         }
 
