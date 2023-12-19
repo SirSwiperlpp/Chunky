@@ -2,18 +2,19 @@ package de.realityrift.chunky.Main;
 
 import de.realityrift.chunky.Commands.ChunkCMD;
 import de.realityrift.chunky.Lang.Language;
-import de.realityrift.chunky.Listener.BlockListener;
-import de.realityrift.chunky.Listener.ProtectionListener;
-import de.realityrift.chunky.Listener.TNTListener;
-import de.realityrift.chunky.Listener.WaterListener;
+import de.realityrift.chunky.Listener.*;
 import de.realityrift.chunky.Provider.ChunkProvider;
+import de.realityrift.chunky.Provider.EcoProvider;
+import de.realityrift.chunky.SQL.EcoSQL;
 import de.realityrift.chunky.SQL.MySQL;
 import de.realityrift.chunky.TabCompletter.ChunkTab;
+import de.realityrift.chunky.Tasks.ChunkPaymentTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -49,12 +50,17 @@ public final class Main extends JavaPlugin {
         loadConfiguration();
         checkAndCreateLanguageFile();
         MySQL.connect("chunkydb");
+        EcoSQL.connect("ecofydb");
         try {
             ChunkProvider.createChunkdb();
+            ChunkProvider.createTheTalbe();
+            EcoProvider.createEcoTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         PluginManager pm = Bukkit.getPluginManager();
+        //TODO REMOVE PLAYERLISTENER
+        pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new ProtectionListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new TNTListener(), this);
@@ -62,12 +68,15 @@ public final class Main extends JavaPlugin {
         ChunkCMD chunkCMD = new ChunkCMD();
         getCommand("chunk").setExecutor(chunkCMD);
         getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));
-
+        BukkitScheduler bsh = Bukkit.getScheduler();
+        ChunkPaymentTask chunkPaymentTask = new ChunkPaymentTask(Bukkit.getWorlds().get(0));
+        bsh.runTaskTimerAsynchronously(this, chunkPaymentTask, 0L, 40L);
     }
 
     @Override
     public void onDisable() {
         MySQL.disconnect();
+        EcoSQL.disconnect();
     }
 
     private void checkAndCreateLanguageFile() {

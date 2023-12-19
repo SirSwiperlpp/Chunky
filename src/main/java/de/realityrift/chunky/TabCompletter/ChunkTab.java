@@ -22,6 +22,17 @@ public class ChunkTab implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> completions = new ArrayList<>();
 
+        if (sender.isOp())
+        {
+            if (args.length == 1) {
+                List<String> subCommands = Arrays.asList("claim", "unclaim", "trust", "info", "flag", "settype", "lock");
+                StringUtil.copyPartialMatches(args[0], subCommands, completions);
+            }
+
+            Collections.sort(completions);
+            return completions;
+        }
+
         if (args.length == 1) {
             List<String> subCommands = Arrays.asList("claim", "unclaim", "trust", "info", "flag");
             StringUtil.copyPartialMatches(args[0], subCommands, completions);

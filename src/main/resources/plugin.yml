@@ -1,4 +1,7 @@
 name: Chunky
+authors:
+  - SirSwiperlpp
+  - Crasher508
 version: '${project.version}'
 main: de.realityrift.chunky.Main.Main
 api-version: '1.20'

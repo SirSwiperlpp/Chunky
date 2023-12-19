@@ -1,3 +1,4 @@
+#MySQL login
 host: "0.0.0.0"
 port: "3306"
 user: "root"
@@ -32,6 +33,9 @@ disable-crystal: true
 #This option disables Respawn Anchors.
 disable-anchor: true
 
+#This option prevents that TNT Minecarts explode.
+disable-tntminecarfs: true
+
 #IMPORTANT: u should leave it to 'false' waterflows trough chunks and i am to dump to fix it ;-;
 waterflows: false
 
@@ -41,9 +45,6 @@ notifyunclaim: true
 #IMPORTANT: this feature REQUIRES the plugin 'ecofy' from sirswiperlpp
 chunkrent:
   paychunks: true
-  #this option defines how often a player needs to pay
-  #example: 1 = every minecraft day. 2 = every second minecraft day and so on
-  paypercycle: 1
   moneyperchunk: 100
 
   #enable or disable commands.
@@ -54,3 +55,5 @@ enabledCommands:
   info: true
   unclaim: true
   flag: true
+  settype: true
+  lock: true

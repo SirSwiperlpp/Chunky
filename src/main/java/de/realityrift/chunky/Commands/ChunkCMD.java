@@ -139,6 +139,26 @@ public class ChunkCMD implements CommandExecutor {
                 sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
                 break;
 
+            case "settype":
+                if (!Main.config.getBoolean("enabledCommands.settype"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+
+                sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
+                break;
+
+            case "lock":
+                if (!Main.config.getBoolean("enabledCommands.lock"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
+
+                sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
+                break;
+
             default:
                 String usage = "§c/chunk [claim | unclaim | trust | flag | info]";
                 player.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));

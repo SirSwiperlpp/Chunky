@@ -20,30 +20,6 @@ public class TNTListener implements Listener {
     static Language language = new Language(new File(Main.getInstance().getDataFolder(), "lang.ini"));
 
     @EventHandler
-    public void onTNTMinecartCreate(VehicleCreateEvent event) {
-        if (event.getVehicle().getType() == EntityType.MINECART_TNT) {
-            ExplosiveMinecart tntMinecart = (ExplosiveMinecart) event.getVehicle();
-            Chunk tntChunk = tntMinecart.getLocation().getChunk();
-
-            if (!ChunkProvider.getChunkFromdb(tntChunk)) {
-                tntMinecart.remove();
-            }
-        }
-    }
-
-    @EventHandler
-    public void onTNTMinecartDestroy(VehicleDestroyEvent event) {
-        if (event.getVehicle().getType() == EntityType.MINECART_TNT) {
-            ExplosiveMinecart tntMinecart = (ExplosiveMinecart) event.getVehicle();
-            Chunk tntChunk = tntMinecart.getLocation().getChunk();
-
-            if (!ChunkProvider.getChunkFromdb(tntChunk)) {
-                event.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.getEntity() instanceof org.bukkit.entity.TNTPrimed) {
             org.bukkit.entity.TNTPrimed tnt = (org.bukkit.entity.TNTPrimed) event.getEntity();
@@ -71,6 +47,18 @@ public class TNTListener implements Listener {
             if (ChunkProvider.getChunkFromdb(tntChunk)) {
                 event.blockList().removeIf(block -> !block.getChunk().equals(tntChunk));
             } else {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onMinecartExplode(EntityExplodeEvent event)
+    {
+        if (event.getEntity().equals(EntityType.MINECART_TNT))
+        {
+            if (Main.config.getBoolean("disable-tntminecarfs"))
+            {
                 event.setCancelled(true);
             }
         }

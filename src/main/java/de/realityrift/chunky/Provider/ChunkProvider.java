@@ -117,4 +117,63 @@ public class ChunkProvider
             e.printStackTrace();
         }
     }
+
+    public static void createTheTalbe()
+    {
+        try {
+            PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS PaymentCheck (wert VARCHAR(255))");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getValueFromTheTalbe()
+    {
+        try {
+            String query = "SELECT wert FROM PaymentCheck";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("wert");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        return "";
+    }
+
+    public static void insertInTheTalbe()
+    {
+        try {
+            String query = "INSERT IGNORE INTO PaymentCheck (wert) values (?)";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+                statement.setString(1, "check");
+
+                statement.executeUpdate();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removefromTheTalbe()
+    {
+        try {
+            String query = "DELETE FROM PaymentCheck WHERE wert = ?";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+                statement.setString(1, "check");
+
+                statement.executeUpdate();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
