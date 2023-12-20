@@ -46,6 +46,37 @@ notifyunclaim: true
 chunkrent:
   paychunks: true
   moneyperchunk: 100
+  #the standart checks at 5pm(17:00)
+  #the times u can select are '1am, 2am, 3am, 4am, 5am, 6am, 7am, 1pm, 2pm, 3pm, 5pm'
+  checks: "5pm"
+
+#The TimeServer is use to KeepTrack of the Time IRL so the ChunkPlugin can Pull money
+#Of player banks for the chunks they claimed.
+TimeServer:
+  #The Official Servers are Always Correct but if u want to Code ur own u can. just keep in Mind that the serverAddress needs to be a URL of a website
+  #for exapmle i used for the Official Servers 'flask' with Python. if u dont want to use this u can Recode everything here if u want. its OpenSource
+  #
+  #NOTE: if the OfficialServers are Offline for some reason u will be fallbacked to MicrosoftsTimeServers or GoogleTimeServers
+  #if u dont want that to happen use ur own or toggle the option 'useFallbackServer'
+  #
+  #https://github.com/SirSwiperlpp/Chunky
+  onlyOfficialServer: true
+
+  #Currently i only Implementet the EU(Europe) and PT(Pacific Time)
+  TimeZone: "EU"
+
+  #this will Reroute to Microsoft or Google TimeServer if ur current is offline
+  #set to 'false' if u want to deactivate this feature
+  useFallback: true
+
+  #the Standart is checking every 4 seconds what time it is.
+  checkInterval: 4
+
+  #Keep this like it is if the option 'onlyOfficialServer' is set to 'true'
+  serverAddress: "api.realityrift.de:45655/api/tserver"
+
+  #this is the Route that the server cheks the current server status. keep it like this if u use official servers
+  statusAddress: "status.realityrift.de45654/status"
 
   #enable or disable commands.
   #EXAMPLE: claim: true = '/chunk claim' is activated

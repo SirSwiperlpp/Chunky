@@ -1,5 +1,6 @@
 package de.realityrift.chunky.Main;
 
+import de.realityrift.chunky.API.ntpFetcher;
 import de.realityrift.chunky.Commands.ChunkCMD;
 import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Listener.*;
@@ -49,6 +50,14 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         loadConfiguration();
         checkAndCreateLanguageFile();
+
+        String ntpServer = "time.windows.com";
+        String targetTimeZone = "Europe/Berlin";
+
+        String ntpTime = ntpFetcher.getNtpTime(ntpServer, targetTimeZone);
+
+        System.out.println(ntpTime);
+
         MySQL.connect("chunkydb");
         EcoSQL.connect("ecofydb");
         try {
@@ -59,8 +68,6 @@ public final class Main extends JavaPlugin {
             throw new RuntimeException(e);
         }
         PluginManager pm = Bukkit.getPluginManager();
-        //TODO REMOVE PLAYERLISTENER
-        pm.registerEvents(new PlayerListener(), this);
         pm.registerEvents(new ProtectionListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new TNTListener(), this);
@@ -69,8 +76,10 @@ public final class Main extends JavaPlugin {
         getCommand("chunk").setExecutor(chunkCMD);
         getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));
         BukkitScheduler bsh = Bukkit.getScheduler();
-        ChunkPaymentTask chunkPaymentTask = new ChunkPaymentTask(Bukkit.getWorlds().get(0));
+        /*ChunkPaymentTask chunkPaymentTask = new ChunkPaymentTask(Bukkit.getWorlds().get(0));
         bsh.runTaskTimerAsynchronously(this, chunkPaymentTask, 0L, 40L);
+
+         */
     }
 
     @Override
