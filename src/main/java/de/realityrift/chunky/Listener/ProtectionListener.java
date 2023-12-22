@@ -25,11 +25,7 @@ public class ProtectionListener implements Listener
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getPlayer().isOp())
         {
-            String ntpServer = "time.google.com";
-            String targetTimeZone = "Europe/Berlin";
-
-            String ntpTime = ntpFetcher.getNtpTime(ntpServer, targetTimeZone);
-            event.getPlayer().sendMessage(ntpTime);
+            ntpFetcher.run((rawDate, date, ex) -> event.getPlayer().sendMessage(rawDate));
             event.setCancelled(false);
             return;
         }

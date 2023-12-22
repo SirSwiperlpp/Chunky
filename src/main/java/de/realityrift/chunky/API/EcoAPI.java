@@ -4,35 +4,36 @@ import de.realityrift.chunky.Provider.EcoProvider;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class EcoAPI
 {
     public static String transferMoney(Player sender, Player reciever, int updatevalue)
     {
-        if (EcoProvider.getPlayerMoney(sender) < updatevalue)
+        if (EcoProvider.getPlayerMoney(String.valueOf(sender.getUniqueId())) < updatevalue)
             return "NotEnough";
 
-        int senderbank = EcoProvider.getPlayerMoney(sender);
-        int recieverbank = EcoProvider.getPlayerMoney(reciever);
+        int senderbank = EcoProvider.getPlayerMoney(String.valueOf(sender.getUniqueId()));
+        int recieverbank = EcoProvider.getPlayerMoney(String.valueOf(reciever.getUniqueId()));
 
         int moneyfromsender = senderbank - updatevalue;
-        EcoProvider.updateMoney(sender, moneyfromsender);
+        EcoProvider.updateMoney(String.valueOf(sender.getUniqueId()), moneyfromsender);
         int moneytoreciever = recieverbank + updatevalue;
-        EcoProvider.updateMoney(reciever, moneytoreciever);
+        EcoProvider.updateMoney(String.valueOf(reciever.getUniqueId()), moneytoreciever);
 
 
         return "null";
     }
 
-    public static void addMoney(Player player, int updatevalue)
+    public static void addMoney(String player, int updatevalue)
     {
-        int playerbank = EcoProvider.getPlayerMoney(player);
+        int playerbank = EcoProvider.getPlayerMoney(String.valueOf(player));
         int newvalue = playerbank + updatevalue;
-        EcoProvider.updateMoney(player, newvalue);
+        EcoProvider.updateMoney(String.valueOf(player), newvalue);
         return;
     }
 
-    public static void removeMoney(Player player, int updatevalue)
+    public static void removeMoney(String player, int updatevalue)
     {
         int playerbank = EcoProvider.getPlayerMoney(player);
         int newvalue = playerbank - updatevalue;

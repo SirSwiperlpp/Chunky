@@ -8,12 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ChunkProvider
-{
-    public static void createChunkdb() throws SQLException
-    {
+public class ChunkProvider {
+    public static void createChunkdb() throws SQLException {
         PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS claimed_chunks (player_name VARCHAR(100), UUID VARCHAR(100), trusted VARCHAR(100), flags VARCHAR(100), ChunkX INT, ChunkZ INT)");
         ps.executeUpdate();
     }
@@ -103,8 +102,7 @@ public class ChunkProvider
         }
     }
 
-    public static void removeChunk(Chunk chunk)
-    {
+    public static void removeChunk(Chunk chunk) {
         try {
             String query = "DELETE FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
@@ -112,65 +110,6 @@ public class ChunkProvider
                 statement.setInt(2, chunk.getZ());
 
                 statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void createTheTalbe()
-    {
-        try {
-            PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS PaymentCheck (wert VARCHAR(255))");
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String getValueFromTheTalbe()
-    {
-        try {
-            String query = "SELECT wert FROM PaymentCheck";
-            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
-
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        return resultSet.getString("wert");
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("SQLException: " + e.getMessage());
-        }
-        return "";
-    }
-
-    public static void insertInTheTalbe()
-    {
-        try {
-            String query = "INSERT IGNORE INTO PaymentCheck (wert) values (?)";
-            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
-                statement.setString(1, "check");
-
-                statement.executeUpdate();
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void removefromTheTalbe()
-    {
-        try {
-            String query = "DELETE FROM PaymentCheck WHERE wert = ?";
-            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
-                statement.setString(1, "check");
-
-                statement.executeUpdate();
-
             }
         } catch (SQLException e) {
             e.printStackTrace();

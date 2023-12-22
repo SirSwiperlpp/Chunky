@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class EcoProvider
 {
@@ -53,12 +54,12 @@ public class EcoProvider
         }
     }
 
-    public static int getPlayerMoney(Player player)
+    public static int getPlayerMoney(String uuid)
     {
         try {
             String query = "SELECT money FROM ecotable WHERE UUID = ?";
             try (PreparedStatement statement = EcoSQL.getConnection().prepareStatement(query)) {
-                statement.setString(1, String.valueOf(player.getUniqueId()));
+                statement.setString(1, String.valueOf(uuid));
 
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
@@ -73,13 +74,15 @@ public class EcoProvider
         return -1;
     }
 
-    public static void updateMoney(Player player, int updatevalue)
+
+
+    public static void updateMoney(String uuid, int updatevalue)
     {
         try {
             String query = "UPDATE ecotable SET money = ? WHERE UUID = ?";
             try (PreparedStatement statement = EcoSQL.getConnection().prepareStatement(query)) {
                 statement.setInt(1, updatevalue);
-                statement.setString(2, String.valueOf(player.getUniqueId()));
+                statement.setString(2, String.valueOf(uuid));
 
                 statement.executeUpdate();
 

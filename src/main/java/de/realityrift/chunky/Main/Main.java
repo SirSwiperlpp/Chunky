@@ -54,7 +54,6 @@ public final class Main extends JavaPlugin {
         EcoSQL.connect("ecofydb");
         try {
             ChunkProvider.createChunkdb();
-            ChunkProvider.createTheTalbe();
             EcoProvider.createEcoTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
