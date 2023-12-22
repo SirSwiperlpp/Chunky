@@ -50,14 +50,6 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         loadConfiguration();
         checkAndCreateLanguageFile();
-
-        String ntpServer = "time.windows.com";
-        String targetTimeZone = "Europe/Berlin";
-
-        String ntpTime = ntpFetcher.getNtpTime(ntpServer, targetTimeZone);
-
-        System.out.println(ntpTime);
-
         MySQL.connect("chunkydb");
         EcoSQL.connect("ecofydb");
         try {
@@ -78,7 +70,6 @@ public final class Main extends JavaPlugin {
         BukkitScheduler bsh = Bukkit.getScheduler();
         /*ChunkPaymentTask chunkPaymentTask = new ChunkPaymentTask(Bukkit.getWorlds().get(0));
         bsh.runTaskTimerAsynchronously(this, chunkPaymentTask, 0L, 40L);
-
          */
     }
 

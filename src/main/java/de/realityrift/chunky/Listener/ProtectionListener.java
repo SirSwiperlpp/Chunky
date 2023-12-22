@@ -1,5 +1,6 @@
 package de.realityrift.chunky.Listener;
 
+import de.realityrift.chunky.API.ntpFetcher;
 import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Main.Main;
 import de.realityrift.chunky.Provider.ChunkProvider;
@@ -24,6 +25,11 @@ public class ProtectionListener implements Listener
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getPlayer().isOp())
         {
+            String ntpServer = "time.google.com";
+            String targetTimeZone = "Europe/Berlin";
+
+            String ntpTime = ntpFetcher.getNtpTime(ntpServer, targetTimeZone);
+            event.getPlayer().sendMessage(ntpTime);
             event.setCancelled(false);
             return;
         }

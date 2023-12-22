@@ -1,5 +1,7 @@
 package de.realityrift.chunky.API;
 
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,7 +14,7 @@ public class ntpFetcher
             InetAddress inetAddress = InetAddress.getByName(ntpServer);
             long currentTime = getTimeFromNtpServer(inetAddress);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone(targetTimeZone));
 
             return sdf.format(new Date(currentTime));
@@ -28,16 +30,22 @@ public class ntpFetcher
         byte[] data = new byte[48];
         data[0] = 0x1B;
 
-        java.net.DatagramSocket socket = new java.net.DatagramSocket();
-        java.net.DatagramPacket packet = new java.net.DatagramPacket(data, data.length, ntpServer, 123);
+        DatagramSocket socket = new DatagramSocket();
+        DatagramPacket packet = new DatagramPacket(data, data.length, ntpServer, 123);
         socket.send(packet);
+
+
+        packet = new DatagramPacket(new byte[48], 48);
         socket.receive(packet);
 
         long ntpTime = 0;
         for (int i = 0; i < 4; i++) {
-            ntpTime = (ntpTime << 8) | (data[40 + i] & 0xff);
+            ntpTime = (ntpTime << 8) | (packet.getData()[40 + i] & 0xff);
         }
+
+        socket.close();
 
         return ntpTime - ntpEpochDiff * 1000;
     }
+
 }
