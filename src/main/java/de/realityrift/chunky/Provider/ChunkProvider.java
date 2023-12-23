@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class ChunkProvider {
     public static void createChunkdb() throws SQLException {
-        PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS claimed_chunks (player_name VARCHAR(100), UUID VARCHAR(100), trusted VARCHAR(100), flags VARCHAR(100), ChunkX INT, ChunkZ INT)");
+        PreparedStatement ps = MySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS claimed_chunks (player_name VARCHAR(100), UUID VARCHAR(100), trusted VARCHAR(100), flags VARCHAR(100), ChunkX INT, ChunkZ INT, world VARCHAR(255))");
         ps.executeUpdate();
     }
 
@@ -85,7 +85,7 @@ public class ChunkProvider {
 
     public static void insertChunk(Player player, Chunk chunk, String trusted, String flags) {
         try {
-            String query = "INSERT IGNORE INTO claimed_chunks (player_name, UUID, trusted, flags, ChunkX, ChunkZ) values (?,?,?,?,?,?)";
+            String query = "INSERT IGNORE INTO claimed_chunks (player_name, UUID, trusted, flags, ChunkX, ChunkZ, world) values (?,?,?,?,?,?,?)";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setString(1, player.getName());
                 statement.setString(2, String.valueOf(player.getUniqueId()));
@@ -93,6 +93,7 @@ public class ChunkProvider {
                 statement.setString(4, flags);
                 statement.setInt(5, chunk.getX());
                 statement.setInt(6, chunk.getZ());
+                statement.setString(7, player.getWorld().getName());
 
                 statement.executeUpdate();
 
@@ -102,12 +103,13 @@ public class ChunkProvider {
         }
     }
 
-    public static void removeChunk(Chunk chunk) {
+    public static void removeChunk(Chunk chunk, String world) {
         try {
-            String query = "DELETE FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ?";
+            String query = "DELETE FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ? AND world = ?";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
                 statement.setInt(1, chunk.getX());
                 statement.setInt(2, chunk.getZ());
+                statement.setString(3, world);
 
                 statement.executeUpdate();
             }

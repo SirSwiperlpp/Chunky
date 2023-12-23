@@ -1,8 +1,10 @@
 package de.realityrift.chunky.Commands;
 
+import de.realityrift.chunky.API.EcoAPI;
 import de.realityrift.chunky.Lang.Language;
 import de.realityrift.chunky.Main.Main;
 import de.realityrift.chunky.Provider.ChunkProvider;
+import de.realityrift.chunky.Provider.EcoProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.Command;
@@ -45,10 +47,23 @@ public class ChunkCMD implements CommandExecutor {
                     return true;
                 }
 
+                if (Main.config.getBoolean("chunkrent.paychunks"))
+                {
+                    if (EcoProvider.getPlayerMoney(String.valueOf(player.getUniqueId())) < 100)
+                    {
+                        player.sendMessage(language.get("prefix") + language.get("claim.failed.notmoney"));
+                        return true;
+                    }
+                }
+
                 if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), "")) {
                     String trusted = "None";
                     String flags = "None";
                     ChunkProvider.insertChunk(player, chunk, trusted, flags);
+                    if (Main.config.getBoolean("chunkrent.paychunks"))
+                    {
+                        EcoAPI.removeMoney(String.valueOf(player.getUniqueId()), 100);
+                    }
                     player.sendMessage(language.get("prefix") + language.get("claim.success"));
                 } else {
                     String alrdyclaimed = ChunkProvider.getPlayerNameForChunk(chunk);
@@ -73,7 +88,8 @@ public class ChunkCMD implements CommandExecutor {
                 if (player.isOp())
                 {
                     String target = ChunkProvider.getPlayerNameForChunk(chunk);
-                    ChunkProvider.removeChunk(chunk);
+                    String world = player.getWorld().getName();
+                    ChunkProvider.removeChunk(chunk, world);
                     player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
 
                     if (Objects.equals(target, player.getName())) return true;
@@ -92,7 +108,8 @@ public class ChunkCMD implements CommandExecutor {
 
                 if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), player.getName()))
                 {
-                    ChunkProvider.removeChunk(chunk);
+                    String world = player.getWorld().getName();
+                    ChunkProvider.removeChunk(chunk, world);
                     player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
                     return true;
                 } else {

@@ -25,19 +25,19 @@ public class EcoAPI
         return "null";
     }
 
-    public static void addMoney(String player, int updatevalue)
+    public static void addMoney(String uuid, int updatevalue)
     {
-        int playerbank = EcoProvider.getPlayerMoney(String.valueOf(player));
+        int playerbank = EcoProvider.getPlayerMoney(String.valueOf(uuid));
         int newvalue = playerbank + updatevalue;
-        EcoProvider.updateMoney(String.valueOf(player), newvalue);
+        EcoProvider.updateMoney(String.valueOf(uuid), newvalue);
         return;
     }
 
-    public static void removeMoney(String player, int updatevalue)
+    public static void removeMoney(String uuid, int updatevalue)
     {
-        int playerbank = EcoProvider.getPlayerMoney(player);
+        int playerbank = EcoProvider.getPlayerMoney(uuid);
         int newvalue = playerbank - updatevalue;
-        EcoProvider.updateMoney(player, newvalue);
+        EcoProvider.updateMoney(uuid, newvalue);
     }
 
 }

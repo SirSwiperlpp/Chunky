@@ -53,11 +53,10 @@ chunkrent:
 #The TimeServer is use to KeepTrack of the Time IRL so the ChunkPlugin can Pull money
 #Of player banks for the chunks they claimed.
 TimeServer:
-  #Currently i only Implementet the TimeZones 'Europe/Berlin' and 'America/Los_Angeles' more in development
+  #Just put in ur TimeZone.
+  #
+  #If u dont know ur timezone go to this link: https://www.timezoneconverter.com/cgi-bin/findzone/findzone
   TimeZone: "Europe/Berlin"
-
-  #the Standart is checking every 4 seconds what time it is.
-  checkInterval: 4
 
   #enable or disable commands.
   #EXAMPLE: claim: true = '/chunk claim' is activated
