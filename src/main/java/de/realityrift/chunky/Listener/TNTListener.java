@@ -25,9 +25,9 @@ public class TNTListener implements Listener {
             org.bukkit.entity.TNTPrimed tnt = (org.bukkit.entity.TNTPrimed) event.getEntity();
             Chunk tntChunk = event.getLocation().getChunk();
 
-            if (ChunkProvider.getChunkFromdb(tntChunk)) {
+            if (ChunkProvider.getChunkFromdb(tntChunk, tntChunk.getWorld().getName())) {
                 Player player = (Player) tnt.getSource();
-                if (player != null && ChunkProvider.getPlayerNameForChunk(tntChunk).equals(player.getName())) {
+                if (player != null && ChunkProvider.getPlayerNameForChunk(tntChunk, tntChunk.getWorld().getName()).equals(player.getName())) {
                     return;
                 }
 
@@ -44,7 +44,7 @@ public class TNTListener implements Listener {
         if (event.getEntity() instanceof org.bukkit.entity.TNTPrimed) {
             Chunk tntChunk = event.getLocation().getChunk();
 
-            if (ChunkProvider.getChunkFromdb(tntChunk)) {
+            if (ChunkProvider.getChunkFromdb(tntChunk, tntChunk.getWorld().getName())) {
                 event.blockList().removeIf(block -> !block.getChunk().equals(tntChunk));
             } else {
                 event.setCancelled(true);

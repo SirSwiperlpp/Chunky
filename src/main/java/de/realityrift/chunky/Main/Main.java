@@ -68,7 +68,7 @@ public final class Main extends JavaPlugin {
         getCommand("chunk").setTabCompleter(new ChunkTab(chunkCMD));
         BukkitScheduler bsh = Bukkit.getScheduler();
         ChunkPaymentTask chunkPaymentTask = new ChunkPaymentTask(Bukkit.getWorlds().get(0));
-        bsh.runTaskTimerAsynchronously(this, chunkPaymentTask, 0L, 800L);
+        bsh.runTaskTimerAsynchronously(this, chunkPaymentTask, 0L, 1200L);
 
     }
 

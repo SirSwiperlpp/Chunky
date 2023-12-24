@@ -31,7 +31,7 @@ public class ChunkCMD implements CommandExecutor {
 
         if (strings.length < 1)
         {
-            String usage = "/chunk [claim | unclaim | trust | flag | info]";
+            String usage = "§c/chunk [claim | unclaim | trust | untrust | flag | info]";
             sender.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
             return true;
         }
@@ -56,7 +56,7 @@ public class ChunkCMD implements CommandExecutor {
                     }
                 }
 
-                if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), "")) {
+                if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk, chunk.getWorld().getName()), "")) {
                     String trusted = "None";
                     String flags = "None";
                     ChunkProvider.insertChunk(player, chunk, trusted, flags);
@@ -66,7 +66,7 @@ public class ChunkCMD implements CommandExecutor {
                     }
                     player.sendMessage(language.get("prefix") + language.get("claim.success"));
                 } else {
-                    String alrdyclaimed = ChunkProvider.getPlayerNameForChunk(chunk);
+                    String alrdyclaimed = ChunkProvider.getPlayerNameForChunk(chunk, chunk.getWorld().getName());
                     player.sendMessage(language.get("prefix") + language.translateString("claim.failed.claimed", alrdyclaimed));
                 }
 
@@ -79,7 +79,7 @@ public class ChunkCMD implements CommandExecutor {
                     return true;
                 }
 
-                if (!ChunkProvider.getChunkFromdb(chunk))
+                if (!ChunkProvider.getChunkFromdb(chunk, player.getWorld().getName()))
                 {
                     player.sendMessage(language.get("prefix") + language.get("chunk.not.claimed"));
                     return true;
@@ -87,7 +87,7 @@ public class ChunkCMD implements CommandExecutor {
 
                 if (player.isOp())
                 {
-                    String target = ChunkProvider.getPlayerNameForChunk(chunk);
+                    String target = ChunkProvider.getPlayerNameForChunk(chunk, chunk.getWorld().getName());
                     String world = player.getWorld().getName();
                     ChunkProvider.removeChunk(chunk, world);
                     player.sendMessage(language.get("prefix") + language.get("unclaim.success"));
@@ -106,7 +106,7 @@ public class ChunkCMD implements CommandExecutor {
                     return true;
                 }
 
-                if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk), player.getName()))
+                if (Objects.equals(ChunkProvider.getPlayerNameForChunk(chunk, chunk.getWorld().getName()), player.getName()))
                 {
                     String world = player.getWorld().getName();
                     ChunkProvider.removeChunk(chunk, world);
@@ -124,7 +124,46 @@ public class ChunkCMD implements CommandExecutor {
                     return true;
                 }
 
-                sender.sendMessage(language.get("prefix") + language.get("feature.wip"));
+                if (strings.length < 2)
+                {
+                    String usage = "§c/chunk [trust] [playername]";
+                    sender.sendMessage(language.get("prefix") + language.translateString("usage.command", usage));
+                    return true;
+                }
+
+                if (ChunkProvider.getPlayerNameForChunk(player.getLocation().getChunk(), player.getWorld().getName()).equals(player.getName()))
+                {
+                    String newtrustraw = strings[1];
+
+                    if (Bukkit.getPlayer(newtrustraw) == null)
+                    {
+                        player.sendMessage(language.get("prefix") + language.get("trust.failed.playernotonline"));
+                        return true;
+                    }
+
+                    if (newtrustraw.equals(player.getName()))
+                    {
+                        player.sendMessage(language.get("prefix") + language.get("trust.failed.self"));
+                        return true;
+                    }
+
+                    String newtrust = Bukkit.getPlayer(newtrustraw).getName();
+                    String ctrusted = ChunkProvider.getTrusted(player, player.getLocation().getChunk());
+                    String newTrustedValue;
+                    if (ctrusted.equals("None")) {
+                        newTrustedValue = newtrust;
+                    } else {
+                        newTrustedValue = ctrusted + "," + newtrust;
+                    }
+                    ChunkProvider.addTruted(newTrustedValue, player);
+                    player.sendMessage(language.get("prefix") + language.translateString("trust.success", newtrust));
+                } else {
+                    player.sendMessage(language.get("prefix") + language.get("trust.failed"));
+                    return true;
+                }
+                break;
+
+            case "untrust":
                 break;
 
             case "info":
@@ -133,7 +172,7 @@ public class ChunkCMD implements CommandExecutor {
                     player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
                     return true;
                 }
-                Map<String, Object> ChunkData = ChunkProvider.getAllInfosAboutChunk(chunk);
+                Map<String, Object> ChunkData = ChunkProvider.getAllInfosAboutChunk(chunk, player.getWorld().getName());
 
                 if (ChunkData.isEmpty())
                 {
@@ -143,7 +182,7 @@ public class ChunkCMD implements CommandExecutor {
                 String pname = String.valueOf(ChunkData.get("player_name"));
                 String ctrusted = String.valueOf(ChunkData.get("trusted"));
                 String cflags = String.valueOf(ChunkData.get("flags"));
-                player.sendMessage("§7------------\n§6Chunk Owner §8> §c" + pname + "\n§6Trusted §8> §c" + ctrusted + "\n§6Flags: §8> §c" + cflags + "\n§7------------");
+                player.sendMessage("§7------" + language.get("prefix") + "§7------\n§6Chunk Owner §8> §c" + pname + "\n§6Trusted §8> §c" + ctrusted + "\n§6Flags: §8> §c" + cflags + "\n§7------" + language.get("prefix") + "§7------");
                 break;
 
             case "flag":

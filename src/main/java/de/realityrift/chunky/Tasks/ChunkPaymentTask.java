@@ -30,18 +30,14 @@ public class ChunkPaymentTask implements Runnable
 
     @Override
     public void run() {
-        System.out.println("Task Running.");
         String timeToCheck = Main.config.getString("chunkrent.checks");
         ntpFetcher.run((rawDate, date, ex) -> {
-            System.out.println(rawDate);
             if (Objects.equals(timeToCheck, rawDate))
             {
-                System.out.println("TimeToCheck eq CurrentTime");
                 new BukkitRunnable()
                 {
                     @Override
                     public void run() {
-                        System.out.println("New hasmap.");
                         try {
                             String query = ("SELECT player_name,UUID, ChunkX, ChunkZ, world FROM claimed_chunks");
                             try (PreparedStatement stmt = MySQL.getConnection().prepareStatement(query); ResultSet rs = stmt.executeQuery(query)) {
@@ -54,39 +50,28 @@ public class ChunkPaymentTask implements Runnable
                                     String value3 = rs.getString("world");
 
                                     if (Bukkit.getPlayer(pname) != null) {
-                                        System.out.println("Player not null");
                                         int currentMoney = EcoProvider.getPlayerMoney(uuid);
-                                        System.out.println(currentMoney);
 
                                         if (currentMoney < 100) {
-                                            System.out.println("NotEnoughMoney");
                                             World world = Bukkit.getWorld(value3);
                                             Chunk targetchunk = world.getChunkAt(Integer.parseInt(value1), Integer.parseInt(value2));
                                             ChunkProvider.removeChunk(targetchunk, value3);
                                             Bukkit.getPlayer(pname).sendMessage(language.get("prefix") + language.translateString("unclaim.notify.paymentfailed", value1, value2));
                                         } else {
-                                            System.out.println(currentMoney + " > 100");
                                             EcoAPI.removeMoney(uuid, 100);
-                                            System.out.println("-100 monetsches");
                                         }
                                     } else {
-                                        System.out.println("Player Null");
                                         int currentMoney = EcoProvider.getPlayerMoney(uuid);
-                                        System.out.println(currentMoney);
 
                                         if (currentMoney < 100) {
-                                            System.out.println("NotEnoughMoney");
                                             World world = Bukkit.getWorld(value3);
                                             Chunk targetchunk = world.getChunkAt(Integer.parseInt(value1), Integer.parseInt(value2));
                                             ChunkProvider.removeChunk(targetchunk, value3);
                                         } else {
-                                            System.out.println(currentMoney + " > 100");
                                             EcoAPI.removeMoney(uuid, 100);
-                                            System.out.println("-100 monetsches");
                                         }
                                     }
 
-                                    System.out.println(uuid + " " + value1 + " " + value2 + " ");
                                 }
                             }
                         } catch (SQLException e) {

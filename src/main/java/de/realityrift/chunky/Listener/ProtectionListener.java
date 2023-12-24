@@ -30,8 +30,8 @@ public class ProtectionListener implements Listener
             return;
         }
 
-        if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk())) {
-            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk());
+        if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk(), event.getPlayer().getWorld().getName())) {
+            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk(), event.getBlock().getWorld().getName());
 
             if (Objects.equals(playerNameForChunk, event.getPlayer().getName())) {
                 event.setCancelled(false);
@@ -51,8 +51,8 @@ public class ProtectionListener implements Listener
             return;
         }
 
-        if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk())) {
-            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk());
+        if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk(), event.getPlayer().getWorld().getName())) {
+            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk(), event.getBlock().getWorld().getName());
 
             if (Objects.equals(playerNameForChunk, event.getPlayer().getName())) {
                 event.setCancelled(false);
@@ -149,8 +149,8 @@ public class ProtectionListener implements Listener
     private boolean canPlayerInteract(Block block, Player player) {
         Location blockLocation = block.getLocation();
 
-        if (ChunkProvider.getChunkFromdb(blockLocation.getChunk())) {
-            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(blockLocation.getChunk());
+        if (ChunkProvider.getChunkFromdb(blockLocation.getChunk(), blockLocation.getWorld().getName())) {
+            String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(blockLocation.getChunk(), blockLocation.getWorld().getName());
 
             return Objects.equals(playerNameForChunk, player.getName());
         }
