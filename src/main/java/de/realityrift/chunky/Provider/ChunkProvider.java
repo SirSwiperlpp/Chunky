@@ -143,12 +143,11 @@ public class ChunkProvider {
 
     public static String getTrusted(Player player, Chunk chunk) {
         try {
-            String query = "SELECT trusted FROM claimed_chunks WHERE player_name = ? AND ChunkX = ? AND ChunkZ = ? AND world = ?";
+            String query = "SELECT trusted FROM claimed_chunks WHERE ChunkX = ? AND ChunkZ = ? AND world = ?";
             try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
-                statement.setString(1, player.getName());
-                statement.setString(2, String.valueOf(chunk.getX()));
-                statement.setString(3, String.valueOf(chunk.getZ()));
-                statement.setString(4, player.getWorld().getName());
+                statement.setString(1, String.valueOf(chunk.getX()));
+                statement.setString(2, String.valueOf(chunk.getZ()));
+                statement.setString(3, player.getWorld().getName());
 
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {

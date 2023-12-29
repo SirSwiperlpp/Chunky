@@ -156,8 +156,6 @@ public class ProtectionListener implements Listener
         }
     }
 
-    //TODO Trust != trusted fix pls
-
     private boolean canPlayerInteract(Block block, Player player) {
         Location blockLocation = block.getLocation();
 

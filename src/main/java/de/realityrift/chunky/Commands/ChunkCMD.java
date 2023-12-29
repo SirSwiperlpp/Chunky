@@ -182,6 +182,11 @@ public class ChunkCMD implements CommandExecutor {
                 break;
 
             case "untrust":
+                if (!Main.config.getBoolean("enabledCommands.info"))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("feature.disabled"));
+                    return true;
+                }
                 break;
 
             case "info":

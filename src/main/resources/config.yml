@@ -67,6 +67,7 @@ TimeServer:
 enabledCommands:
   claim: true
   trust: true
+  untrust: true
   info: true
   unclaim: true
   flag: true
