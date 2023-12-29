@@ -23,7 +23,7 @@ if u dont want the messages to be english u can just edit the lang.ini as u pref
 ### Side Note
 if u dont want to download it from SpigotMC u need to build the project by yourself using [maven](https://spring.io/guides/gs/maven/)
 
-be free to edit this plugin completely but please dont upload it without my permission to github or SpigotMC. thank you
+be free to edit this plugin completely but please dont upload it without my permission to any website. thank you
 
 ## Support
 if u need support u can just message me on discord 'SirSwiperlpp'
