@@ -47,6 +47,12 @@ public class ChunkCMD implements CommandExecutor {
                     return true;
                 }
 
+                if (Main.config.getInt("chunkrent.maxclaimsperplayer") <= ChunkProvider.countPlayerChunks(player.getName()))
+                {
+                    player.sendMessage(language.get("prefix") + language.get("claim.failed.maxclaims"));
+                    return true;
+                }
+
                 if (Main.config.getBoolean("chunkrent.paychunks"))
                 {
                     if (EcoProvider.getPlayerMoney(String.valueOf(player.getUniqueId())) < 100)
@@ -147,16 +153,28 @@ public class ChunkCMD implements CommandExecutor {
                         return true;
                     }
 
-                    String newtrust = Bukkit.getPlayer(newtrustraw).getName();
+                    Player newtrust = Bukkit.getPlayer(newtrustraw);
                     String ctrusted = ChunkProvider.getTrusted(player, player.getLocation().getChunk());
+
+                    if (ctrusted.contains(newtrust.getName()))
+                    {
+                        player.sendMessage(language.get("prefix") + language.translateString("trust.failed.alrdy", newtrust.getName()));
+                        return true;
+                    }
+
                     String newTrustedValue;
                     if (ctrusted.equals("None")) {
-                        newTrustedValue = newtrust;
+                        newTrustedValue = newtrust.getName();
                     } else {
                         newTrustedValue = ctrusted + "," + newtrust;
                     }
                     ChunkProvider.addTruted(newTrustedValue, player);
-                    player.sendMessage(language.get("prefix") + language.translateString("trust.success", newtrust));
+                    player.sendMessage(language.get("prefix") + language.translateString("trust.success", newtrust.getName()));
+
+                    if (Main.config.getBoolean("notifytrust"))
+                    {
+                        newtrust.sendMessage(language.get("prefix") + language.translateString("trust.notify.trusted", player.getName()));
+                    }
                 } else {
                     player.sendMessage(language.get("prefix") + language.get("trust.failed"));
                     return true;

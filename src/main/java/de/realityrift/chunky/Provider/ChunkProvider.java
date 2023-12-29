@@ -86,6 +86,26 @@ public class ChunkProvider {
         return "";
     }
 
+    public static int countPlayerChunks(String pname)
+    {
+        try {
+            String query = "SELECT COUNT(player_name) AS result_count FROM claimed_chunks WHERE player_name = ?";
+            try (PreparedStatement statement = MySQL.getConnection().prepareStatement(query)) {
+                statement.setString(1, pname);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getInt("result_count");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SQLException: " + e.getMessage());
+        }
+        return 0;
+    }
+
 
     public static void insertChunk(Player player, Chunk chunk, String trusted, String flags) {
         try {

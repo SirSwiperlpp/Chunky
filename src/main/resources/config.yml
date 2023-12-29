@@ -42,9 +42,13 @@ waterflows: false
 #if set to 'false' the owner of the chunk will not get notified if his chunk get unclaimed by an Administrator.
 notifyunclaim: true
 
+#if set to 'false' player dont get notifyed if trusted on someones claim.
+notifytrust: true
+
 #IMPORTANT: this feature REQUIRES the plugin 'ecofy' from sirswiperlpp
 chunkrent:
   paychunks: true
+  maxclaimsperplayer: 10
   moneyperchunk: 100
   #the standart checks at 17:00
   #IMPORTANT: u need to give the time in this format: HH:mm

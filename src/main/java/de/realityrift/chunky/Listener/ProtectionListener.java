@@ -25,13 +25,18 @@ public class ProtectionListener implements Listener
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getPlayer().isOp())
         {
-            ntpFetcher.run((rawDate, date, ex) -> event.getPlayer().sendMessage(rawDate));
             event.setCancelled(false);
             return;
         }
 
         if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk(), event.getPlayer().getWorld().getName())) {
             String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk(), event.getBlock().getWorld().getName());
+
+            if (ChunkProvider.getTrusted(event.getPlayer(), event.getBlock().getChunk()).contains(event.getPlayer().getName()))
+            {
+                event.setCancelled(false);
+                return;
+            }
 
             if (Objects.equals(playerNameForChunk, event.getPlayer().getName())) {
                 event.setCancelled(false);
@@ -53,6 +58,12 @@ public class ProtectionListener implements Listener
 
         if (ChunkProvider.getChunkFromdb(event.getBlock().getChunk(), event.getPlayer().getWorld().getName())) {
             String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(event.getBlock().getChunk(), event.getBlock().getWorld().getName());
+
+            if (ChunkProvider.getTrusted(event.getPlayer(), event.getBlock().getChunk()).contains(event.getPlayer().getName()))
+            {
+                event.setCancelled(false);
+                return;
+            }
 
             if (Objects.equals(playerNameForChunk, event.getPlayer().getName())) {
                 event.setCancelled(false);
@@ -145,9 +156,15 @@ public class ProtectionListener implements Listener
         }
     }
 
+    //TODO Trust != trusted fix pls
 
     private boolean canPlayerInteract(Block block, Player player) {
         Location blockLocation = block.getLocation();
+
+        if (ChunkProvider.getTrusted(player, blockLocation.getChunk()).contains(player.getName()))
+        {
+            return true;
+        }
 
         if (ChunkProvider.getChunkFromdb(blockLocation.getChunk(), blockLocation.getWorld().getName())) {
             String playerNameForChunk = ChunkProvider.getPlayerNameForChunk(blockLocation.getChunk(), blockLocation.getWorld().getName());

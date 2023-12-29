@@ -32,6 +32,7 @@ public class ChunkPaymentTask implements Runnable
     public void run() {
         String timeToCheck = Main.config.getString("chunkrent.checks");
         ntpFetcher.run((rawDate, date, ex) -> {
+            System.out.println(rawDate);
             if (Objects.equals(timeToCheck, rawDate))
             {
                 new BukkitRunnable()
