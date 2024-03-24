@@ -4,7 +4,7 @@ Chunky is a spigot plugin used for protecting your players for griefers.
 ## How to install
 
 ### 1. Step - Download
-visit the plugin page on [SpigtoMC](implementet-soon) and Download the Latest Version.
+visit the plugin page on [SpigtoMC]([implementet-soon](https://www.spigotmc.org/resources/chunky.115793/)) and Download the Latest Version.
 its very important that u download [Ecofy](implementet-soon) as well
 
 ### 2. Step - Upload
